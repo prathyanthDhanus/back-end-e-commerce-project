@@ -6,6 +6,21 @@ const url = "mongodb+srv://prathyanthbusinessmail:M0xlSdpCEavulUWJ@cluster0.aul7
 
 app.use(express.json());
 
+
+
+
+
+//---------------user------------------
+const userRoutes = require("./src/routes/userRoutes")
+app.use("/",userRoutes)
+
+
+//---------------admin----------------
+const adminRoutes = require("./src/routes/adminRoutes")
+app.use("/",adminRoutes)
+
+
+
 //mongodb connection setup
 mongoose.connect(url)
 .then(()=> console.log("mongodb atlas connected"))
@@ -13,4 +28,19 @@ mongoose.connect(url)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+app.listen(port,()=>{
+    console.log(`port is starting on ${port}`)
+})
 
