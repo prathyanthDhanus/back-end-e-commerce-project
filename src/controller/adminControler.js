@@ -54,7 +54,7 @@ const getallUsers = async (req,res)=>{
     }
 }
 
-//--------------get users by id----------------------
+//--------------get users by id-----------------------
 
 const getUsers = async (req,res)=>{
    const userId = req.params.id 
