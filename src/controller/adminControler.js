@@ -70,4 +70,5 @@ const getUsers = async (req,res)=>{
 
 
 
+
 module.exports = {adminReg,adminLogin,getallUsers,getUsers}
