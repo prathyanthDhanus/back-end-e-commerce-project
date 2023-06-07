@@ -1,5 +1,4 @@
 const admin = require("../model/adminSchema");
-const user = require("../model/userSchema");
 const users = require("../model/userSchema")
 
 
@@ -50,13 +49,13 @@ const getallUsers = async (req,res)=>{
         const userdata= await users.find()
         res.send(userdata)
     }catch(err){
-        console.log("error found")
+        console.log("error found",err)
     }
 }
 
 //--------------get users by id-----------------------
 
-const getUsers = async (req,res)=>{
+const getUserId = async (req,res)=>{
    const userId = req.params.id 
     try{
         const userdata = await users.findById(userId)
@@ -71,4 +70,4 @@ const getUsers = async (req,res)=>{
 
 
 
-module.exports = {adminReg,adminLogin,getallUsers,getUsers}
+module.exports = {adminReg,adminLogin,getallUsers,getUserId}
