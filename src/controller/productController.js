@@ -26,19 +26,61 @@ const getAllProduct = async (req,res)=>{
 
 //---------------get product by category-----------
 
-
-
-
+const getCategory = async (req,res)=>{
+    const Category = req.params.category
+    try{
+        const productData = await products.find({category:Category})
+        if(products.length<0){
+            res.send("no products found in this category")
+        }else{
+            res.send(productData)
+        }
+    }catch(err){
+        console.log("error found",err)
+    }
+}
 
 //---------------get products by id----------------
+
 const getproductById = async (req,res)=>{
    try{
     const productId = req.params.id;
     const productData = await products.findById(productId)
-    res.send(productData)
+    console.log("ughyf")
+    if(productId){
+        res.send(productData)
+    }else{
+        res.send("please enter a valid id")
+    }
    }catch(err){
     console.log("error found",err)
    }
+}
+
+//--------------update products using id------------------
+
+const updateProduct = async (req,res)=>{
+    try{
+        const productId = req.params.id
+        const data = req.body
+        const productData = await products.findByIdAndUpdate(data,productId)
+        res.send(productData)
+    }catch(err){
+        console.log("error found",err)
+    }
+}
+
+//-------------delete products using id-----------------
+
+const deleteProduct = async (req,res)=>{
+    try{
+        const productId = req.params.id
+        const data = req.body
+        const productData = await products.findByIdAndDelete(data,productId)
+        res.send(productData)
+    }catch(err){
+        console.log("error found",err)
+    }
 }
 
 
@@ -55,9 +97,7 @@ const getproductById = async (req,res)=>{
 
 
 
-
-
-module.exports={addProduct,getAllProduct}
+module.exports={addProduct,getAllProduct,getproductById,getCategory,updateProduct,deleteProduct}
 
 
 
