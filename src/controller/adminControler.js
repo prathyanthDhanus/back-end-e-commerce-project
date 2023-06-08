@@ -1,41 +1,19 @@
-const admin = require("../model/adminSchema");
 const users = require("../model/userSchema")
 
-
-
-//----------------admin registration------------------
-
-const adminReg = async (req, res) => {
-    try {
-        const UserName = req.body.username;
-        const Password = req.body.password;
-        const identifyAdmin = await admin.findOne(req.body)
-        if (identifyAdmin) {
-            res.send("admin already exist")
-        }
-        const outcome = new admin({ username: UserName, password: Password })
-        await outcome.save()
-        res.send("Registered successfully,plese login")
-    } catch (err) {
-        console.log("error found", err)
-    }
-}
 
 //-----------------admin login------------------------
 
 const adminLogin = async (req, res) => {
     try {
-        // const UserName = req.body.username;
-        const Password = req.body.password;
-        const identifyAdmin = await admin.findOne(req.body)
-        if (!identifyAdmin) {
-            res.send("Admin not found")
+        const UserName = process.env.ADMIN_USERNAME      //requiring username and password from .env
+        const Password = process.env. ADMIN_PASSWORD
+
+        const uname = req.body.username
+        const pwd = req.body.password
+        if (UserName==uname && Password==pwd) {
+            res.send("Admin login successfully")
         } else {
-            if (identifyAdmin.password == Password) {
-                res.send("Login successfully")
-            } else {
-                res.send("Wrong password")
-            }
+            res.send("Wrong username and password")
         }
     } catch (err) {
         console.log("error found", err)
@@ -70,4 +48,4 @@ const getUserId = async (req,res)=>{
 
 
 
-module.exports = {adminReg,adminLogin,getallUsers,getUserId}
+module.exports = {adminLogin,getallUsers,getUserId}

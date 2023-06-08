@@ -43,12 +43,12 @@ const getCategory = async (req,res)=>{
 //---------------get products by id----------------
 
 const getproductById = async (req,res)=>{
+    const productId = req.params.id 
    try{
-    const productId = req.params.id;
     const productData = await products.findById(productId)
-    console.log("ughyf")
-    if(productId){
-        res.send(productData)
+    console.log(productId)
+    if(productData){
+        res.json(productData)
     }else{
         res.send("please enter a valid id")
     }
@@ -63,7 +63,7 @@ const updateProduct = async (req,res)=>{
     try{
         const productId = req.params.id
         const data = req.body
-        const productData = await products.findByIdAndUpdate(data,productId)
+        const productData = await products.findByIdAndUpdate(productId,data)
         res.send(productData)
     }catch(err){
         console.log("error found",err)
@@ -76,7 +76,7 @@ const deleteProduct = async (req,res)=>{
     try{
         const productId = req.params.id
         const data = req.body
-        const productData = await products.findByIdAndDelete(data,productId)
+        const productData = await products.findByIdAndDelete(productId,data)
         res.send(productData)
     }catch(err){
         console.log("error found",err)

@@ -5,6 +5,7 @@ const user = require("../model/userSchema")
 
 
 //------------user registration---------------
+
 const reg = async (req,res)=>{
     try{
         const UserName = req.body.username
@@ -22,6 +23,7 @@ const reg = async (req,res)=>{
 }
 
 //-------------user login--------------------
+
   const login = async (req,res)=>{
     try{
       const UserName = req.body.username;
@@ -43,7 +45,8 @@ const reg = async (req,res)=>{
     }
   }
   
-  //-----------------
+  //----------------product added to cart by user-------------
+
 
 
 

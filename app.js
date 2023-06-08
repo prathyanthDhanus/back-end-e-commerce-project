@@ -1,10 +1,13 @@
 const express = require("express");
 const app = express();
 const mongoose = require('mongoose');
+require('dotenv').config();
+
 const port = 3000;
 const url = "mongodb+srv://prathyanthbusinessmail:M0xlSdpCEavulUWJ@cluster0.aul70bf.mongodb.net/"
 
 app.use(express.json());
+
 
 
 
