@@ -37,7 +37,7 @@ const login = async (req, res) => {
       }
     }
   } catch (err) {
-    console.log("internal server error",err)
+    console.log("internal server error", err)
   }
 }
 
@@ -66,7 +66,7 @@ const addToCart = async (req, res) => {
 
 //---------------get products from cart------------------
 
-const getToCart = async (req,res) => {
+const getToCart = async (req, res) => {
   const productId = req.params.id
   try {
     const identifyUser = await user.findById(productId).populate("cart")
@@ -82,30 +82,43 @@ const getToCart = async (req,res) => {
 
 //--------------product added to wishlist------------------
 
-const addToWishlist = async (req,res)=>{
+const addToWishlist = async (req, res) => {
   const productId = req.params.id
   const productData = await product.findById(productId)
-  if(!productData){
+  if (!productData) {
     res.send("something went wrong")
   }
-  try{
+  try {
     const UserName = req.body.username
-    const identifyUser = await user.findOne({username:UserName})
-    if(identifyUser.wishlist.includes(productId)){
-      res.send("product already exist on cart")
-    }else{
+    const identifyUser = await user.findOne({ username: UserName })
+    if (identifyUser.wishlist.includes(productId)) {
+      res.send("product already exist on wishlist")
+    } else {
       identifyUser.wishlist.push(productId)
       await identifyUser.save()
-      res.send("product successfully added to cart")
+      res.send("product successfully added to wishlist")
     }
-  }catch(err){
-    console.log("error found",err)
+  } catch (err) {
+    console.log("error found", err)
   }
 
 }
 
 //----------------get product from wishlist-----------------
 
+const getTowishlist = async (req, res) => {
+  const productId = req.params.id
+  try {
+    const identifyUser = await user.findById(productId).populate("wishlist")
+    if (identifyUser.wishlist.length > 0) {
+      res.send(identifyUser.wishlist)
+    } else {
+      res.send("wishlist is empty")
+    }
+  } catch (err) {
+    console.log("error found", err)
+  }
+}
 
 
 
@@ -121,5 +134,4 @@ const addToWishlist = async (req,res)=>{
 
 
 
-
-module.exports = { reg, login, addToCart, getToCart,addToWishlist }
+module.exports = { reg, login, addToCart, getToCart, addToWishlist, getTowishlist }
