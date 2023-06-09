@@ -14,6 +14,7 @@ const router = express.Router();
     router.get("/users/products/category/:category",products.getCategory);
     router.post("/users/cart/:id",user.addToCart);
     router.get("/users/cart/:id",user.getToCart);
+    router.post("/users/wishlist/:id",user.addToWishlist);
     
 
 

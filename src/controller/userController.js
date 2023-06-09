@@ -3,7 +3,6 @@ const product = require("../model/productSchema")
 
 
 
-
 //------------user registration---------------
 const reg = async (req, res) => {
   try {
@@ -38,7 +37,7 @@ const login = async (req, res) => {
       }
     }
   } catch (err) {
-    console.log("internal server error", err)
+    console.log("internal server error",err)
   }
 }
 
@@ -67,10 +66,10 @@ const addToCart = async (req, res) => {
 
 //---------------get products from cart------------------
 
-const getToCart = async (req, res) => {
+const getToCart = async (req,res) => {
   const productId = req.params.id
   try {
-    const identifyUser = await user.findById(productId)
+    const identifyUser = await user.findById(productId).populate("cart")
     if (identifyUser) {
       res.send(identifyUser.cart)
     } else {
@@ -81,7 +80,31 @@ const getToCart = async (req, res) => {
   }
 }
 
-//--------------
+//--------------product added to wishlist------------------
+
+const addToWishlist = async (req,res)=>{
+  const productId = req.params.id
+  const productData = await product.findById(productId)
+  if(!productData){
+    res.send("something went wrong")
+  }
+  try{
+    const UserName = req.body.username
+    const identifyUser = await user.findOne({username:UserName})
+    if(identifyUser.wishlist.includes(productId)){
+      res.send("product already exist on cart")
+    }else{
+      identifyUser.wishlist.push(productId)
+      await identifyUser.save()
+      res.send("product successfully added to cart")
+    }
+  }catch(err){
+    console.log("error found",err)
+  }
+
+}
+
+//----------------get product from wishlist-----------------
 
 
 
@@ -97,4 +120,6 @@ const getToCart = async (req, res) => {
 
 
 
-module.exports = { reg, login, addToCart, getToCart }
+
+
+module.exports = { reg, login, addToCart, getToCart,addToWishlist }
