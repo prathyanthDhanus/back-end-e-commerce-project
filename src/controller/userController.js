@@ -120,7 +120,12 @@ const getTowishlist = async (req, res) => {
   }
 }
 
+//----------------delete from cart------------------
 
+const deletefrmCart = async (req,res)=>{
+  const productId = req.params.id
+  const productData = req.body.id
+}
 
 
 
