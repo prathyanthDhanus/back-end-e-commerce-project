@@ -102,25 +102,27 @@ const getToCart = async (req, res) => {
 //   }
 
 // }
-
-const deletefrmCart = async (req, res) => {
-  const productId = [req.body.id];
-  const Username = req.body.username;
-
+const deleteFromCart = async (req, res) => {
+  const productId = req.params.id
+  const Username = req.body.username
   try {
-    const identifyUser = await user.findOne({ username: Username });
-    if (!identifyUser) {
-      res.send('please login');
+    const identifyUser = await user.findOne({ username: Username })
+    const updatedCart = identifyUser.cart.filter((id) => id.toString() !== productId.toString())
+
+    if (updatedCart.length !== identifyUser.cart.length) {
+      identifyUser.cart = updatedCart
+      await identifyUser.save()
+      res.send("Product successfully removed from the cart")
     } else {
-      const updatedCart = identifyUser.cart.filter(e => !productId.includes(e));
-      identifyUser.cart = updatedCart; // Assign the updated cart back to the identifyUser.cart property
-      await identifyUser.save();
-      res.send(`${productId.length} product removed from cart`);
+      res.send("Product does not exist in the cart")
     }
   } catch (err) {
-    console.log("error found", err);
+    console.log("Error found", err)
   }
-};
+}
+
+
+
 
 
 
@@ -181,4 +183,4 @@ const getTowishlist = async (req, res) => {
 
 
 
-module.exports = { reg, login, addToCart, getToCart, deletefrmCart, addToWishlist, getTowishlist }
+module.exports = { reg, login, addToCart, getToCart, deleteFromCart, addToWishlist, getTowishlist }
