@@ -82,26 +82,6 @@ const getToCart = async (req, res) => {
 
 //----------------delete from cart------------------
 
-// const deletefrmCart = async (req, res) => {
-//   const productId = [req.body.id]
-//   const Username = req.body.username
-
-//   try {
-//     const identifyUser = await user.findOne({ username: Username })
-//     if (!identifyUser) {
-//       res.send('please login')
-//     }
-//     else {
-//       const updatedCart = identifyUser.cart.filter(e => !productId.includes(e))
-//       identifyUser = updatedCart
-//       await identifyUser.save()
-//       res.send(`${productId.length} product removed from cart`)
-//     }
-//   } catch (err) {
-//     console.log("error found", err)
-//   }
-
-// }
 const deleteFromCart = async (req, res) => {
   const productId = req.params.id
   const Username = req.body.username
