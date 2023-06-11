@@ -80,6 +80,51 @@ const getToCart = async (req, res) => {
   }
 }
 
+//----------------delete from cart------------------
+
+// const deletefrmCart = async (req, res) => {
+//   const productId = [req.body.id]
+//   const Username = req.body.username
+
+//   try {
+//     const identifyUser = await user.findOne({ username: Username })
+//     if (!identifyUser) {
+//       res.send('please login')
+//     }
+//     else {
+//       const updatedCart = identifyUser.cart.filter(e => !productId.includes(e))
+//       identifyUser = updatedCart
+//       await identifyUser.save()
+//       res.send(`${productId.length} product removed from cart`)
+//     }
+//   } catch (err) {
+//     console.log("error found", err)
+//   }
+
+// }
+
+const deletefrmCart = async (req, res) => {
+  const productId = [req.body.id];
+  const Username = req.body.username;
+
+  try {
+    const identifyUser = await user.findOne({ username: Username });
+    if (!identifyUser) {
+      res.send('please login');
+    } else {
+      const updatedCart = identifyUser.cart.filter(e => !productId.includes(e));
+      identifyUser.cart = updatedCart; // Assign the updated cart back to the identifyUser.cart property
+      await identifyUser.save();
+      res.send(`${productId.length} product removed from cart`);
+    }
+  } catch (err) {
+    console.log("error found", err);
+  }
+};
+
+
+
+
 //--------------product added to wishlist------------------
 
 const addToWishlist = async (req, res) => {
@@ -120,12 +165,7 @@ const getTowishlist = async (req, res) => {
   }
 }
 
-//----------------delete from cart------------------
-
-const deletefrmCart = async (req,res)=>{
-  const productId = req.params.id
-  const productData = req.body.id
-}
+//---------------delete products from wishlist----------------
 
 
 
@@ -139,4 +179,6 @@ const deletefrmCart = async (req,res)=>{
 
 
 
-module.exports = { reg, login, addToCart, getToCart, addToWishlist, getTowishlist }
+
+
+module.exports = { reg, login, addToCart, getToCart, deletefrmCart, addToWishlist, getTowishlist }
