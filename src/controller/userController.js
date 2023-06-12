@@ -80,7 +80,7 @@ const getToCart = async (req, res) => {
   }
 }
 
-//----------------delete from cart------------------
+//----------------delete products from cart------------------
 
 const deleteFromCart = async (req, res) => {
   const productId = req.params.id
@@ -100,12 +100,6 @@ const deleteFromCart = async (req, res) => {
     console.log("Error found", err)
   }
 }
-
-
-
-
-
-
 
 //--------------product added to wishlist------------------
 
@@ -149,7 +143,15 @@ const getTowishlist = async (req, res) => {
 
 //---------------delete products from wishlist----------------
 
+const deleteFromWishlist = async (req,res)=>{
+ const productId = req.params.id
+ const Username = req.body.username
+ try{
+  const identifyUser = await user.findOne({username:Username})
+  
+ }
 
+}
 
 
 
