@@ -4,6 +4,7 @@ const product = require("../model/productSchema")
 
 
 //------------user registration---------------
+
 const reg = async (req, res) => {
   try {
     const UserName = req.body.username
@@ -156,11 +157,9 @@ const deleteFromWishlist = async (req, res) => {
     } else {
       res.send('product does not exist from wishlist');
     }
-    
   } catch (err) {
     console.log("error found", err)
   }
-
 }
 
 

@@ -14,10 +14,10 @@ router.get("/users/products/:id", products.getproductById);
 router.get("/users/products/category/:category", products.getCategory);
 router.post("/users/cart/:id", user.addToCart);
 router.get("/users/cart/:id", user.getToCart);
-router.delete("/users/cart/:id",user.deleteFromCart)
+router.delete("/users/cart/:id", user.deleteFromCart)
 router.post("/users/wishlist/:id", user.addToWishlist);
 router.get("/users/wishlist/:id", user.getTowishlist);
-router.delete("/users/wishlist/:id",user.deleteFromWishlist)
+router.delete("/users/wishlist/:id", user.deleteFromWishlist)
 
 
 
