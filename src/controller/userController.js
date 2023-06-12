@@ -143,13 +143,22 @@ const getTowishlist = async (req, res) => {
 
 //---------------delete products from wishlist----------------
 
-const deleteFromWishlist = async (req,res)=>{
- const productId = req.params.id
- const Username = req.body.username
- try{
-  const identifyUser = await user.findOne({username:Username})
-  
- }
+const deleteFromWishlist = async (req, res) => {
+  const productId = req.params.id
+  const Username = req.body.username
+  try {
+    const identifyUser = await user.findOne({ username: Username })
+    const updatedWishlist = identifyUser.wishlist.filter((id) => id.toString() !== productId.toString())
+    if (updatedWishlist.length !== identifyUser.wishlist.length) {
+      identifyUser = updatedWishlist
+      await identifyUser.save()
+      res.send("product successfully removed from wishlist")
+    } else {
+      res.send('product does not exist from wishli')
+    }
+  } catch (err) {
+    console.log("error found", err)
+  }
 
 }
 
@@ -165,4 +174,4 @@ const deleteFromWishlist = async (req,res)=>{
 
 
 
-module.exports = { reg, login, addToCart, getToCart, deleteFromCart, addToWishlist, getTowishlist }
+module.exports = { reg, login, addToCart, getToCart, deleteFromCart, addToWishlist, getTowishlist, deleteFromWishlist }
