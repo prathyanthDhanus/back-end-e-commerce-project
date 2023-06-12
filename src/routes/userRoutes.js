@@ -17,7 +17,7 @@ router.get("/users/cart/:id", user.getToCart);
 router.delete("/users/cart/:id",user.deleteFromCart)
 router.post("/users/wishlist/:id", user.addToWishlist);
 router.get("/users/wishlist/:id", user.getTowishlist);
-
+router.delete("/users/wishlist/:id",user.deleteFromWishlist)
 
 
 

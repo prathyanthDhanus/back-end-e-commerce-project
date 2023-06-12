@@ -150,12 +150,13 @@ const deleteFromWishlist = async (req, res) => {
     const identifyUser = await user.findOne({ username: Username })
     const updatedWishlist = identifyUser.wishlist.filter((id) => id.toString() !== productId.toString())
     if (updatedWishlist.length !== identifyUser.wishlist.length) {
-      identifyUser = updatedWishlist
-      await identifyUser.save()
-      res.send("product successfully removed from wishlist")
+      identifyUser.wishlist = updatedWishlist;
+      await identifyUser.save();
+      res.send("product successfully removed from wishlist");
     } else {
-      res.send('product does not exist from wishli')
+      res.send('product does not exist from wishlist');
     }
+    
   } catch (err) {
     console.log("error found", err)
   }
