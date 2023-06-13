@@ -12,7 +12,9 @@ const adminLogin = async (req, res) => {
         const uname = req.body.username
         const pwd = req.body.password
         if (UserName == uname && Password == pwd) {
-            res.send("Admin login successfully")
+            // res.send("Admin login successfully")
+            const token = jwt.sign({username:UserName},"adminscrtkey",{expiresIn:"24h"})
+            res.status(200).json({auth:true, message:"Admin logged in successfully " ,token});
         } else {
             res.send("Wrong username and password")
         }
