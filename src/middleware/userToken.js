@@ -6,7 +6,7 @@ const userToken = ((req,res,next)=>{
         res.status(401).send("no token provided")
     }
     let token = authHeader.split(" ")[1]
-    jwt.verify(token,"scrtkey",(err)=>{
+    jwt.verify(token,"userscrtkey",(err)=>{
         if(err){
             res.send("Invalid User")
         }else{
