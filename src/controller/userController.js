@@ -1,6 +1,7 @@
 const user = require("../model/userSchema")
 const product = require("../model/productSchema")
-
+const jwt = require("jsonwebtoken")
+const bcrypt = require("bcrypt")
 
 
 //------------user registration---------------
@@ -13,7 +14,8 @@ const reg = async (req, res) => {
     if (identifyUser) {
       res.send("user already exist")
     }
-    const outcome = new user({ username: UserName, password: Password });
+    let hashedPassword = await bcrypt.hash(Password,10) 
+    const outcome = new user({ username: UserName, password: hashedPassword });
     await outcome.save()
     res.send("Registered successfully,please login")
   } catch (err) {
@@ -30,17 +32,21 @@ const login = async (req, res) => {
     const identifyUser = await user.findOne({ username: UserName })
     if (!identifyUser) {
       res.send("Wrong user")
-    } else {
-      if (Password == identifyUser.password) {
-        res.send("login successfully")
-      } else {
-        res.send("wrong password")
+    } 
+    let PassWord = await bcrypt.hash(Password,10)
+    bcrypt.compare(PassWord,identifyUser.password,(err)=>{
+      if(err){
+        res.send("Invalid password")
       }
-    }
+    })
+   const token = jwt.sign({username:UserName},"userscrtkey",{expiresIn:"24h"})
+   res.status(200).json({auth:true, message:"User logged in successfully " ,token});
   } catch (err) {
     console.log("internal server error", err)
   }
 }
+
+
 
 //----------------product added to cart by user-------------
 

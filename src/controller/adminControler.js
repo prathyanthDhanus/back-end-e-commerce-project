@@ -1,4 +1,5 @@
 const users = require("../model/userSchema")
+const jwt = require("jsonwebtoken")
 
 
 //-----------------admin login------------------------
