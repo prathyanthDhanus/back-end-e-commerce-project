@@ -46,15 +46,13 @@ const login = async (req, res) => {
   }
 }
 
-
-
 //----------------product added to cart by user-------------
 
 const addToCart = async (req, res) => {
   const productId = req.params.id
   const productData = await product.findById(productId)
   if (!productData) {
-    res.send("something went wrong")
+    return res.send("something went wrong")
   }
   try {
     const Username = req.body.username

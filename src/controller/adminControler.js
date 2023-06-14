@@ -6,20 +6,24 @@ const jwt = require("jsonwebtoken")
 
 const adminLogin = async (req, res) => {
     try {
-        const UserName = process.env.ADMIN_USERNAME      //requiring username and password from .env
+        const username = process.env.ADMIN_USERNAME      //requiring username and password from .env
         const Password = process.env.ADMIN_PASSWORD
 
         const uname = req.body.username
         const pwd = req.body.password
-        if (UserName == uname && Password == pwd) {
+
+        if (username == uname && Password == pwd) {
             // res.send("Admin login successfully")
-            const token = jwt.sign({username:UserName},"adminscrtkey",{expiresIn:"24h"})
-            res.status(200).json({auth:true, message:"Admin logged in successfully " ,token});
-        } else {
-            res.send("Wrong username and password")
+            const token = jwt.sign({ username }, "adminscrtkey", { expiresIn: "24h" })
+            return res.status(200).json({ auth: true, message: "Admin logged in successfully", token });
         }
+
+        res.send("Wrong username and password")
+
     } catch (err) {
+
         console.log("error found", err)
+
     }
 }
 

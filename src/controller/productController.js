@@ -63,7 +63,7 @@ const updateProduct = async (req, res) => {
     try {
         const productId = req.params.id
         const data = req.body
-        const productData = await products.findByIdAndUpdate(productId, data)
+        const productData = await products.findByIdAndUpdate(productId, data,{new:true})
         res.send(productData)
     } catch (err) {
         console.log("error found", err)
