@@ -32,7 +32,9 @@ const adminLogin = async (req, res) => {
 const getAllUsers = async (req, res) => {
     try {
         const userdata = await users.find()
-        res.send(userdata)
+
+        res.json({status:"success",message:"List of users",data:userdata})
+        
     } catch (err) {
         console.log("error found", err)
     }
@@ -44,7 +46,7 @@ const getUserId = async (req, res) => {
     const userId = req.params.id
     try {
         const userdata = await users.findById(userId)
-        res.send(userdata)
+        res.send({status:"success",message:"User details",data:userdata})
     } catch (err) {
         console.log('error found', err)
     }
