@@ -7,29 +7,29 @@ const jwt = require("jsonwebtoken")
 const adminLogin = async (req, res) => {
     try {
         const username = process.env.ADMIN_USERNAME      //requiring username and password from .env
-        const Password = process.env.ADMIN_PASSWORD
+        const password = process.env.ADMIN_PASSWORD
 
-        const uname = req.body.username
-        const pwd = req.body.password
+        const USERNAME = req.body.username
+        const PASSWORD = req.body.password
 
-        if (username == uname && Password == pwd) {
+        if (username == USERNAME && password == PASSWORD) {
             // res.send("Admin login successfully")
             const token = jwt.sign({ username }, "adminscrtkey", { expiresIn: "24h" })
-            return res.status(200).json({ auth: true, message: "Admin logged in successfully", token });
+            return res.status(200).json({ status: "success", message: "Admin logged in successfully", token });
         }
 
-        res.send("Wrong username and password")
+        res.json({ status: "failure", message: "Wrong username or password", error_message: "username or password mismatch" })
 
-    } catch (err) {
+    } catch (error) {
 
-        console.log("error found", err)
+        res.json({ status: "failure", message: "something went wrong", error_message: error.message })
 
     }
 }
 
 //-----------------get all users---------------------
 
-const getallUsers = async (req, res) => {
+const getAllUsers = async (req, res) => {
     try {
         const userdata = await users.find()
         res.send(userdata)
@@ -55,4 +55,4 @@ const getUserId = async (req, res) => {
 
 
 
-module.exports = { adminLogin, getallUsers, getUserId }
+module.exports = { adminLogin, getAllUsers, getUserId }

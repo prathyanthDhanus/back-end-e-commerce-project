@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt")
 
 //------------user registration---------------
 
-const reg = async (req, res) => {
+const register = async (req, res) => {
   try {
     const UserName = req.body.username
     const Password = req.body.password
@@ -71,7 +71,7 @@ const addToCart = async (req, res) => {
 
 //---------------get products from cart------------------
 
-const getToCart = async (req, res) => {
+const getFromCart = async (req, res) => {
   const productId = req.params.id
   try {
     const identifyUser = await user.findById(productId).populate("cart")
@@ -132,7 +132,7 @@ const addToWishlist = async (req, res) => {
 
 //----------------get product from wishlist-----------------
 
-const getTowishlist = async (req, res) => {
+const getFromWishlist = async (req, res) => {
   const productId = req.params.id
   try {
     const identifyUser = await user.findById(productId).populate("wishlist")
@@ -178,4 +178,4 @@ const deleteFromWishlist = async (req, res) => {
 
 
 
-module.exports = { reg, login, addToCart, getToCart, deleteFromCart, addToWishlist, getTowishlist, deleteFromWishlist }
+module.exports = { register, login, addToCart, getFromCart, deleteFromCart, addToWishlist, getFromWishlist, deleteFromWishlist }

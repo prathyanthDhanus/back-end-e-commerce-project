@@ -42,7 +42,7 @@ const getCategory = async (req, res) => {
 
 //---------------get products by id----------------
 
-const getproductById = async (req, res) => {
+const getProductById = async (req, res) => {
     const productId = req.params.id
     try {
         const productData = await products.findById(productId)
@@ -97,7 +97,7 @@ const deleteProduct = async (req, res) => {
 
 
 
-module.exports = { addProduct, getAllProduct, getproductById, getCategory, updateProduct, deleteProduct }
+module.exports = { addProduct, getAllProduct, getProductById, getCategory, updateProduct, deleteProduct }
 
 
 
