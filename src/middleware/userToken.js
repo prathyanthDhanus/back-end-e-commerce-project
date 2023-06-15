@@ -8,7 +8,7 @@ const userToken = ((req,res,next)=>{
     let token = authHeader.split(" ")[1]
     jwt.verify(token,"userscrtkey",(err)=>{
         if(err){
-            res.send("Invalid User")
+            res.json({status:"failure",message:"Invalid User"})
         }else{
            next();
         }

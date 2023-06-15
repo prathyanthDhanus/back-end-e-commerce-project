@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken")
 //-----------------admin login------------------------
 
 const adminLogin = async (req, res) => {
-    try {
+    
         const username = process.env.ADMIN_USERNAME      //requiring username and password from .env
         const password = process.env.ADMIN_PASSWORD
 
@@ -20,17 +20,12 @@ const adminLogin = async (req, res) => {
 
         res.json({ status: "failure", message: "Wrong username or password", error_message: "username or password mismatch" })
 
-    } catch (error) {
-
-        res.json({ status: "failure", message: "something went wrong", error_message: error.message })
-
-    }
 }
 
 //-----------------get all users---------------------
 
 const getAllUsers = async (req, res) => {
-    try {
+    
         const userdata = await users.find()
 
         res.json({
@@ -42,16 +37,13 @@ const getAllUsers = async (req, res) => {
             data: userdata
         })
 
-    } catch (err) {
-        console.log("error found", err)
-    }
 }
 
 //--------------get users by id-----------------------
 
 const getUserId = async (req, res) => {
     const userId = req.params.id
-    try {
+    
         const userdata = await users.findById(userId)
         res.send({
 
@@ -61,9 +53,6 @@ const getUserId = async (req, res) => {
 
             data: userdata
         })
-    } catch (err) {
-        console.log('error found', err)
-    }
 }
 
 

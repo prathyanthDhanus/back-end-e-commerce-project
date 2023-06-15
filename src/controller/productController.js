@@ -4,7 +4,7 @@ const products = require("../model/productSchema")
 //----------------add products-------------
 
 const addProduct = async (req, res) => {
-    try {
+  
         const add = new products(req.body)
         const productData = await add.save();
         res.json({
@@ -16,15 +16,13 @@ const addProduct = async (req, res) => {
             data: productData
 
         })
-    } catch (err) {
-        console.log("error", err)
-    }
+    
 }
 
 //---------------get products-----------------
 
 const getAllProduct = async (req, res) => {
-    try {
+   
         const productData = await products.find();
         res.json({
 
@@ -34,16 +32,14 @@ const getAllProduct = async (req, res) => {
 
             data: productData
         })
-    } catch (err) {
-        console.log("error found", err)
-    }
+  
 }
 
 //---------------get product by category-----------
 
 const getCategory = async (req, res) => {
     const Category = req.params.category
-    try {
+    
         const productData = await products.find({ category: Category })
         if (products.length < 0) {
             res.json({
@@ -62,16 +58,14 @@ const getCategory = async (req, res) => {
                 data: productData
             })
         }
-    } catch (err) {
-        console.log("error found", err)
-    }
+    
 }
 
 //---------------get products by id----------------
 
 const getProductById = async (req, res) => {
     const productId = req.params.id
-    try {
+    
         const productData = await products.findById(productId)
         console.log(productId)
         if (productData) {
@@ -91,15 +85,13 @@ const getProductById = async (req, res) => {
                 message: "please enter a valid id"
             })
         }
-    } catch (err) {
-        console.log("error found", err)
-    }
+    
 }
 
 //--------------update products using id------------------
 
 const updateProduct = async (req, res) => {
-    try {
+    
         const productId = req.params.id
         const data = req.body
         const productData = await products.findByIdAndUpdate(productId, data, { new: true })
@@ -111,15 +103,13 @@ const updateProduct = async (req, res) => {
 
             data: productData
         })
-    } catch (err) {
-        console.log("error found", err)
-    }
+    
 }
 
 //-------------delete products using id-----------------
 
 const deleteProduct = async (req, res) => {
-    try {
+  
         const productId = req.params.id
         const data = req.body
         const productData = await products.findByIdAndDelete(productId, data)
@@ -131,9 +121,7 @@ const deleteProduct = async (req, res) => {
 
             data: productData
         })
-    } catch (err) {
-        console.log("error found", err)
-    }
+  
 }
 
 
