@@ -8,16 +8,30 @@ const bcrypt = require("bcrypt")
 
 const register = async (req, res) => {
   try {
-    const UserName = req.body.username
-    const Password = req.body.password
-    const identifyUser = await user.findOne({ username: UserName })
+    const USERNAME = req.body.username
+    const PASSWORD = req.body.password
+    const identifyUser = await user.findOne({ username: USERNAME })
+
     if (identifyUser) {
-      res.send("user already exist")
+      res.json({
+
+        status: "false",
+
+        message: "user already exist"
+      })
     }
-    let hashedPassword = await bcrypt.hash(Password,10) 
-    const outcome = new user({ username: UserName, password: hashedPassword });
+
+    let hashedPassword = await bcrypt.hash(PASSWORD, 10)
+
+    const outcome = new user({ username: USERNAME, password: hashedPassword });
     await outcome.save()
-    res.send("Registered successfully,please login")
+
+    res.json({
+
+      status: "success",
+
+      message: "Registered successfully,please login"
+    })
   } catch (err) {
     console.log("error found", err)
   }
@@ -27,20 +41,32 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const UserName = req.body.username;
-    const Password = req.body.password;
-    const identifyUser = await user.findOne({ username: UserName })
+    const USERNAME = req.body.username;
+    const PASSWORD = req.body.password;
+    const identifyUser = await user.findOne({ username: USERNAME })
     if (!identifyUser) {
-      res.send("Wrong user")
-    } 
-    let PassWord = await bcrypt.hash(Password,10)
-    bcrypt.compare(PassWord,identifyUser.password,(err)=>{
-      if(err){
-        res.send("Invalid password")
+      res.json({
+
+        status: "success",
+
+        message: "Wrong user"
+      })
+    }
+    let PassWord = await bcrypt.hash(PASSWORD, 10)
+    bcrypt.compare(PassWord, identifyUser.password, (err) => {
+      if (err) {
+        return res.json({ status: "failure", message: "Invalid password" })
       }
     })
-   const token = jwt.sign({username:UserName},"userscrtkey",{expiresIn:"24h"})
-   res.status(200).json({auth:true, message:"User logged in successfully " ,token});
+    const token = jwt.sign({ username: USERNAME }, "userscrtkey", { expiresIn: "24h" })
+    res.status(200).json({
+
+      status: "success",
+
+      message: "User logged in successfully ",
+
+      token
+    });
   } catch (err) {
     console.log("internal server error", err)
   }
@@ -52,17 +78,17 @@ const addToCart = async (req, res) => {
   const productId = req.params.id
   const productData = await product.findById(productId)
   if (!productData) {
-    return res.send("something went wrong")
+    return res.json({ status: "failure", message: "something went wrong" })
   }
   try {
-    const Username = req.body.username
-    const identifyUser = await user.findOne({ username: Username })
+    const USERNAME = req.body.username
+    const identifyUser = await user.findOne({ username: USERNAME })
     if (identifyUser.cart.includes(productId)) {
-      res.send("product already exist on cart")
+      res.json({ status: "failure", message: "product already exist on cart" })
     } else {
       identifyUser.cart.push(productId)
       await identifyUser.save()
-      res.send("product successfully added to cart")
+      res.json({ status: "success", message: "product successfully added to cart" })
     }
   } catch (err) {
     console.log("error found", err)
@@ -76,9 +102,9 @@ const getFromCart = async (req, res) => {
   try {
     const identifyUser = await user.findById(productId).populate("cart")
     if (identifyUser) {
-      res.send(identifyUser.cart)
+      res.json({ status: "success", message: "cart items retrieved successfully", data: identifyUser.cart })
     } else {
-      res.send("please login")
+      res.json({ status: "failure", message: "please login" })
     }
   } catch (err) {
     console.log("error found", err)
@@ -112,17 +138,17 @@ const addToWishlist = async (req, res) => {
   const productId = req.params.id
   const productData = await product.findById(productId)
   if (!productData) {
-    res.send("something went wrong")
+    res.json({ status: "failure", message: "something went wrong" })
   }
   try {
-    const UserName = req.body.username
-    const identifyUser = await user.findOne({ username: UserName })
+    const USERNAME = req.body.username
+    const identifyUser = await user.findOne({ username: USERNAME })
     if (identifyUser.wishlist.includes(productId)) {
-      res.send("product already exist on wishlist")
+      res.json({ status: "failure", message: "product already exist on wishlist" })
     } else {
       identifyUser.wishlist.push(productId)
       await identifyUser.save()
-      res.send("product successfully added to wishlist")
+      res.json({ status: "success", message: "product successfully added to wishlist" })
     }
   } catch (err) {
     console.log("error found", err)
@@ -137,9 +163,9 @@ const getFromWishlist = async (req, res) => {
   try {
     const identifyUser = await user.findById(productId).populate("wishlist")
     if (identifyUser.wishlist.length > 0) {
-      res.send(identifyUser.wishlist)
+      res.json({ status: "success", message: "wishlisted product retrieved successfully ", data: identifyUser.wishlist })
     } else {
-      res.send("wishlist is empty")
+      res.json({ status: "failure", message: "wishlist is empty" })
     }
   } catch (err) {
     console.log("error found", err)
@@ -150,16 +176,16 @@ const getFromWishlist = async (req, res) => {
 
 const deleteFromWishlist = async (req, res) => {
   const productId = req.params.id
-  const Username = req.body.username
+  const USERNAME = req.body.username
   try {
-    const identifyUser = await user.findOne({ username: Username })
+    const identifyUser = await user.findOne({ username: USERNAME })
     const updatedWishlist = identifyUser.wishlist.filter((id) => id.toString() !== productId.toString())
     if (updatedWishlist.length !== identifyUser.wishlist.length) {
       identifyUser.wishlist = updatedWishlist;
       await identifyUser.save();
-      res.send("product successfully removed from wishlist");
+      res.json({ status: "success", message: "product successfully removed from wishlist" });
     } else {
-      res.send('product does not exist from wishlist');
+      res.json({ status: "failure", message: "product does not exist on wishlist" });
     }
   } catch (err) {
     console.log("error found", err)
