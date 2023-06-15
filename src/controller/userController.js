@@ -13,7 +13,7 @@ const register = async (req, res) => {
   const identifyUser = await user.findOne({ username: USERNAME })
 
   if (identifyUser) {
-    res.json({
+    return res.json({
 
       status: "failure",
 
@@ -82,12 +82,12 @@ const addToCart = async (req, res) => {
   const USERNAME = req.body.username
   const identifyUser = await user.findOne({ username: USERNAME })
   if (identifyUser.cart.includes(productId)) {
-    res.json({ status: "failure", message: "product already exist on cart" })
-  } else {
-    identifyUser.cart.push(productId)
-    await identifyUser.save()
-    res.json({ status: "success", message: "product successfully added to cart" })
+    return res.json({ status: "failure", message: "product already exist on cart" })
   }
+  identifyUser.cart.push(productId)
+  await identifyUser.save()
+  res.json({ status: "success", message: "product successfully added to cart" })
+
 
 }
 
@@ -98,10 +98,10 @@ const getFromCart = async (req, res) => {
 
   const identifyUser = await user.findById(productId).populate("cart")
   if (identifyUser) {
-    res.json({ status: "success", message: "cart items retrieved successfully", data: identifyUser.cart })
-  } else {
-    res.json({ status: "failure", message: "please login" })
+    return res.json({ status: "success", message: "cart items retrieved successfully", data: identifyUser.cart })
   }
+  res.json({ status: "failure", message: "please login" })
+
 
 }
 
@@ -117,10 +117,10 @@ const deleteFromCart = async (req, res) => {
   if (updatedCart.length !== identifyUser.cart.length) {
     identifyUser.cart = updatedCart
     await identifyUser.save()
-    res.json({ status: "success", message: "Product successfully removed from the cart" })
-  } else {
-    res.json({ status: "failure", message: "Product does not exist in the cart" })
+    return res.json({ status: "success", message: "Product successfully removed from the cart" })
   }
+  res.json({ status: "failure", message: "Product does not exist in the cart" })
+
 
 }
 
@@ -130,18 +130,18 @@ const addToWishlist = async (req, res) => {
   const productId = req.params.id
   const productData = await product.findById(productId)
   if (!productData) {
-    res.json({ status: "failure", message: "something went wrong" })
+    return res.json({ status: "failure", message: "something went wrong" })
   }
 
   const USERNAME = req.body.username
   const identifyUser = await user.findOne({ username: USERNAME })
   if (identifyUser.wishlist.includes(productId)) {
-    res.json({ status: "failure", message: "product already exist on wishlist" })
-  } else {
-    identifyUser.wishlist.push(productId)
-    await identifyUser.save()
-    res.json({ status: "success", message: "product successfully added to wishlist" })
+    return res.json({ status: "failure", message: "product already exist on wishlist" })
   }
+  identifyUser.wishlist.push(productId)
+  await identifyUser.save()
+  res.json({ status: "success", message: "product successfully added to wishlist" })
+
 
 }
 
@@ -152,10 +152,10 @@ const getFromWishlist = async (req, res) => {
 
   const identifyUser = await user.findById(productId).populate("wishlist")
   if (identifyUser.wishlist.length > 0) {
-    res.json({ status: "success", message: "wishlisted product retrieved successfully ", data: identifyUser.wishlist })
-  } else {
-    res.json({ status: "failure", message: "wishlist is empty" })
+    return res.json({ status: "success", message: "wishlisted product retrieved successfully ", data: identifyUser.wishlist })
   }
+  res.json({ status: "failure", message: "wishlist is empty" })
+
 
 }
 
@@ -170,10 +170,10 @@ const deleteFromWishlist = async (req, res) => {
   if (updatedWishlist.length !== identifyUser.wishlist.length) {
     identifyUser.wishlist = updatedWishlist;
     await identifyUser.save();
-    res.json({ status: "success", message: "product successfully removed from wishlist" });
-  } else {
-    res.json({ status: "failure", message: "product does not exist on wishlist" });
+    return res.json({ status: "success", message: "product successfully removed from wishlist" });
   }
+  res.json({ status: "failure", message: "product does not exist on wishlist" });
+
 
 }
 
