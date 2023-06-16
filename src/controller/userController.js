@@ -2,15 +2,24 @@ const user = require("../model/userSchema")
 const product = require("../model/productSchema")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
+const userJoi = require("../help/schemaValidation")
 
 
 //------------user registration---------------
 
 const register = async (req, res) => {
 
-  const USERNAME = req.body.username
-  const PASSWORD = req.body.password
-  const identifyUser = await user.findOne({ username: USERNAME })
+  // const USERNAME = req.body.username
+  // const PASSWORD = req.body.password
+
+  //validating req.body
+  const { error, value } = userJoi.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+  const { username, password } = value
+
+  const identifyUser = await user.findOne({ username: username })
 
   if (identifyUser) {
     return res.json({
@@ -21,9 +30,9 @@ const register = async (req, res) => {
     })
   }
 
-  let hashedPassword = await bcrypt.hash(PASSWORD, 10)
+  let hashedPassword = await bcrypt.hash(password, 10)
 
-  const outcome = new user({ username: USERNAME, password: hashedPassword });
+  const outcome = new user({ username: username, password: hashedPassword });
   await outcome.save()
 
   res.json({
@@ -39,9 +48,15 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
 
-  const USERNAME = req.body.username;
-  const PASSWORD = req.body.password;
-  const identifyUser = await user.findOne({ username: USERNAME })
+  // const USERNAME = req.body.username;
+  // const PASSWORD = req.body.password;
+  const { error, value } = userJoi.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+  const { username, password } = value
+
+  const identifyUser = await user.findOne({ username: username })
   if (!identifyUser) {
     return res.json({
 
@@ -51,14 +66,14 @@ const login = async (req, res) => {
     })
   }
 
-  let PassWord = await bcrypt.hash(PASSWORD, 10)
-  bcrypt.compare(PassWord, identifyUser.password, (err) => {
-    if (err) {
+  let PassWord = await bcrypt.hash(password, 10)
+  bcrypt.compare(PassWord, identifyUser.password, (error) => {
+    if (error) {
       return res.json({ status: "failure", message: "Invalid password" })
     }
   })
 
-  const token = jwt.sign({ username: USERNAME }, "userscrtkey", { expiresIn: "24h" })
+  const token = jwt.sign({ username: username }, "userscrtkey", { expiresIn: "24h" })
   res.status(200).json({
 
     status: "success",
@@ -98,7 +113,13 @@ const getFromCart = async (req, res) => {
 
   const identifyUser = await user.findById(productId).populate("cart")
   if (identifyUser) {
-    return res.json({ status: "success", message: "cart items retrieved successfully", data: identifyUser.cart })
+    return res.json({
+
+      status: "success",
+      message: "cart items retrieved successfully",
+      data: identifyUser.cart
+
+    })
   }
   res.json({ status: "failure", message: "please login" })
 
@@ -152,7 +173,12 @@ const getFromWishlist = async (req, res) => {
 
   const identifyUser = await user.findById(productId).populate("wishlist")
   if (identifyUser.wishlist.length > 0) {
-    return res.json({ status: "success", message: "wishlisted product retrieved successfully ", data: identifyUser.wishlist })
+    return res.json({
+
+      status: "success",
+      message: "wishlisted product retrieved successfully ",
+      data: identifyUser.wishlist
+    })
   }
   res.json({ status: "failure", message: "wishlist is empty" })
 
@@ -176,15 +202,6 @@ const deleteFromWishlist = async (req, res) => {
 
 
 }
-
-
-
-
-
-
-
-
-
 
 
 

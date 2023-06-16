@@ -42,13 +42,13 @@ const getCategory = async (req, res) => {
     
         const productData = await products.find({ category: Category })
         if (products.length < 0) {
-            res.json({
+           return res.json({
 
                 status: "failure",
 
                 message: "no product found in this category"
             })
-        } else {
+        } 
             res.json({
 
                 status: "success",
@@ -57,7 +57,7 @@ const getCategory = async (req, res) => {
 
                 data: productData
             })
-        }
+        
     
 }
 
@@ -69,7 +69,7 @@ const getProductById = async (req, res) => {
         const productData = await products.findById(productId)
         console.log(productId)
         if (productData) {
-            res.json({
+         return  res.json({
 
                 status: "success",
 
@@ -77,14 +77,14 @@ const getProductById = async (req, res) => {
 
                 data: productData
             })
-        } else {
+        } 
             res.json({
 
                 status: "failure",
 
                 message: "please enter a valid id"
             })
-        }
+        
     
 }
 

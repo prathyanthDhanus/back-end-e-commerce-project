@@ -6,8 +6,8 @@ const adminToken = ((req,res,next)=>{
         res.status(404).send("no token provided")
     }
     let token = authHeader.split(" ")[1]
-    jwt.verify(token,"adminscrtkey",(err)=>{
-        if(err){
+    jwt.verify(token,"adminscrtkey",(error)=>{
+        if(error){
             res.json({status:"failure",message:"Invalid token"})
         }else{
             next()
