@@ -45,14 +45,18 @@ const getUserId = async (req, res) => {
     const userId = req.params.id
     
         const userdata = await users.findById(userId)
-        res.send({
+        if(userId){
+           return res.json({
+    
+                status: "success",
+    
+                message: "User details",
+    
+                data: userdata
+            })
+        }
+        res.json({status:"success",message:"user id is incorrect"})
 
-            status: "success",
-
-            message: "User details",
-
-            data: userdata
-        })
 }
 
 
