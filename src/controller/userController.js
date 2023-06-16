@@ -204,6 +204,6 @@ const deleteFromWishlist = async (req, res) => {
 }
 
 
-
+//exporting modules
 
 module.exports = { register, login, addToCart, getFromCart, deleteFromCart, addToWishlist, getFromWishlist, deleteFromWishlist }
