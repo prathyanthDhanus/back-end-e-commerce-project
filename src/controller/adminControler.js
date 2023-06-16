@@ -60,8 +60,6 @@ const getUserId = async (req, res) => {
 }
 
 
-
-
-
+//exporting modules
 
 module.exports = { adminLogin, getAllUsers, getUserId }
