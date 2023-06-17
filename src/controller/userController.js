@@ -3,8 +3,7 @@ const product = require("../model/productSchema")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const userJoi = require("../help/schemaValidation")
-
-
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 //------------user registration---------------
 
 const register = async (req, res) => {
@@ -203,7 +202,69 @@ const deleteFromWishlist = async (req, res) => {
 
 }
 
+//----------------------payment section-------------------
+
+const payment = async (req, res) => {
+  const userId = req.params.id;
+  const User = await user.findById(userId).populate("cart");
+
+
+  // console.log(User)
+
+  if (!User) {
+    return res.json({
+      status: "failure",
+      message: "please login"
+    });
+  }
+
+  if (User.cart.length === 0) {
+    return res.json({
+      message: "user cart is empty, please add some products"
+    });
+  }
+
+  let totalSum = User.cart.reduce((sum, item) => {
+    return sum + item.price;
+  }, 0);
+
+  let metadata = "thank you for purchasing from us, see you soon";
+//method for integrate stripe api in express
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    line_items: [
+      {
+        price_data: {
+          currency: 'inr',
+          product_data: {
+            name: 'Sample Product',
+            description: 'This is a sample product',
+            images: ['https://example.com/product-image.jpg'],
+          },
+          unit_amount: totalSum*100, // amount in rupees
+        },
+        quantity: User.cart.length,
+      },
+    ],
+    mode: 'payment',
+    success_url: 'https://ruperhat.com/wp-content/uploads/2020/06/Paymentsuccessful21.png',
+    cancel_url: 'https://media.licdn.com/dms/image/C5112AQGiR7AdalYNjg/article-cover_image-shrink_600_2000/0/1582176281444?e=2147483647&v=beta&t=QVzBFLJpbDlQMX_H5iKXr7Jr1w6Pm60tOJb47rjpX6Q',
+    metadata: {
+      script:metadata,
+    },
+  })
+
+  res.json({ url: session.url, orderId:session.id});
+
+  const details =User.orderdetails.push({
+    products:quantity,
+    orderid : session.id,
+    total:totalSum
+  })
+ console.log(details)
+
+};
 
 //exporting modules
 
-module.exports = { register, login, addToCart, getFromCart, deleteFromCart, addToWishlist, getFromWishlist, deleteFromWishlist }
+module.exports = { register, login, addToCart, getFromCart, deleteFromCart, addToWishlist, getFromWishlist, deleteFromWishlist,payment }

@@ -11,6 +11,20 @@ const userschema = new mongoose.Schema({
         wishlist: [{
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "product"
+        }],
+        orderdetails: [{
+                products: [{
+                        type: Number,
+                        default: 0
+                }],
+                orderid: [{
+                        type: String,
+                        default: ""
+                }],
+                total: [{
+                        type: Number,
+                        default: 0
+                }]
         }]
 })
 
