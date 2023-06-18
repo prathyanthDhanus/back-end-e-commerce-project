@@ -24,7 +24,7 @@ router.get("/users/wishlist/:id", usertkn, tryCatch(user.getFromWishlist));
 router.delete("/users/wishlist/:id", usertkn, tryCatch(user.deleteFromWishlist))
 
 
-router.get("/users/product/cart/payment/:id",tryCatch(user.payment))
+router.get("/users/products/cart/payment/:id",tryCatch(user.payment))
 
 
 

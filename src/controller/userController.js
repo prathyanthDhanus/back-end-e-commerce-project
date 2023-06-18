@@ -208,7 +208,6 @@ const payment = async (req, res) => {
   const userId = req.params.id;
   const User = await user.findById(userId).populate("cart");
 
-
   // console.log(User)
 
   if (!User) {
@@ -228,8 +227,8 @@ const payment = async (req, res) => {
     return sum + item.price;
   }, 0);
 
+  //method for integrate stripe api in express
   let metadata = "thank you for purchasing from us, see you soon";
-//method for integrate stripe api in express
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
     line_items: [
@@ -241,30 +240,31 @@ const payment = async (req, res) => {
             description: 'This is a sample product',
             images: ['https://example.com/product-image.jpg'],
           },
-          unit_amount: totalSum*100, // amount in rupees
+          unit_amount: totalSum * 100, // amount in rupees
         },
-        quantity: User.cart.length,
+        quantity: 1,
       },
     ],
     mode: 'payment',
     success_url: 'https://ruperhat.com/wp-content/uploads/2020/06/Paymentsuccessful21.png',
     cancel_url: 'https://media.licdn.com/dms/image/C5112AQGiR7AdalYNjg/article-cover_image-shrink_600_2000/0/1582176281444?e=2147483647&v=beta&t=QVzBFLJpbDlQMX_H5iKXr7Jr1w6Pm60tOJb47rjpX6Q',
     metadata: {
-      script:metadata,
+      script: metadata,
     },
   })
 
-  res.json({ url: session.url, orderId:session.id});
+  res.json({ url: session.url, orderId: session.id });
 
-  const details =User.orderdetails.push({
-    products:quantity,
-    orderid : session.id,
-    total:totalSum
+  User.orderdetails.push({
+    products: User.cart.length,
+    orderid: session.id,
+    total: totalSum
   })
- console.log(details)
+  await User.save();
+  // console.log(User.orderdetails)
 
 };
 
 //exporting modules
 
-module.exports = { register, login, addToCart, getFromCart, deleteFromCart, addToWishlist, getFromWishlist, deleteFromWishlist,payment }
+module.exports = { register, login, addToCart, getFromCart, deleteFromCart, addToWishlist, getFromWishlist, deleteFromWishlist, payment }
