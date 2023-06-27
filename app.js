@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const port = 3000;
-const url = "mongodb+srv://prathyanthbusinessmail:DHTiakq7mZ25tA7h@cluster0.aul70bf.mongodb.net/"
+const url = process.env.MONGODB_URL
 
 app.use(express.json()); // JSON parsing middleware is applied to all incoming requests before they reach the route handlers. 
 

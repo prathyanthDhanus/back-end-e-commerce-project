@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const userJoi = require("../help/schemaValidation")
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
+
+
 //------------user registration---------------
 
 const register = async (req, res) => {
@@ -96,11 +98,17 @@ const addToCart = async (req, res) => {
   const USERNAME = req.body.username
   const identifyUser = await user.findOne({ username: USERNAME })
   if (identifyUser.cart.includes(productId)) {
-    return res.json({ status: "failure", message: "product already exist on cart" })
+    return res.json({
+      status: "failure",
+      message: "product already exist on cart"
+    })
   }
   identifyUser.cart.push(productId)
   await identifyUser.save()
-  res.json({ status: "success", message: "product successfully added to cart" })
+  res.json({
+    status: "success",
+    message: "product successfully added to cart"
+  })
 
 
 }
@@ -137,9 +145,16 @@ const deleteFromCart = async (req, res) => {
   if (updatedCart.length !== identifyUser.cart.length) {
     identifyUser.cart = updatedCart
     await identifyUser.save()
-    return res.json({ status: "success", message: "Product successfully removed from the cart" })
+    return res.json({
+
+      status: "success",
+      message: "Product successfully removed from the cart"
+    })
   }
-  res.json({ status: "failure", message: "Product does not exist in the cart" })
+  res.json({
+    status: "failure",
+    message: "Product does not exist in the cart"
+  })
 
 
 }
@@ -156,11 +171,17 @@ const addToWishlist = async (req, res) => {
   const USERNAME = req.body.username
   const identifyUser = await user.findOne({ username: USERNAME })
   if (identifyUser.wishlist.includes(productId)) {
-    return res.json({ status: "failure", message: "product already exist on wishlist" })
+    return res.json({ 
+      status: "failure", 
+      message: "product already exist on wishlist" 
+    })
   }
   identifyUser.wishlist.push(productId)
   await identifyUser.save()
-  res.json({ status: "success", message: "product successfully added to wishlist" })
+  res.json({ 
+    status: "success", 
+    message: "product successfully added to wishlist" 
+  })
 
 
 }
@@ -195,9 +216,15 @@ const deleteFromWishlist = async (req, res) => {
   if (updatedWishlist.length !== identifyUser.wishlist.length) {
     identifyUser.wishlist = updatedWishlist;
     await identifyUser.save();
-    return res.json({ status: "success", message: "product successfully removed from wishlist" });
+    return res.json({
+      status: "success",
+      message: "product successfully removed from wishlist"
+    });
   }
-  res.json({ status: "failure", message: "product does not exist on wishlist" });
+  res.json({
+    status: "failure",
+    message: "product does not exist on wishlist"
+  });
 
 
 }
@@ -267,4 +294,7 @@ const payment = async (req, res) => {
 
 //exporting modules
 
-module.exports = { register, login, addToCart, getFromCart, deleteFromCart, addToWishlist, getFromWishlist, deleteFromWishlist, payment }
+module.exports = {
+  register, login, addToCart, getFromCart, deleteFromCart,
+  addToWishlist, getFromWishlist, deleteFromWishlist, payment
+}
